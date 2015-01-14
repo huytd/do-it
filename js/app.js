@@ -1,5 +1,10 @@
 var app = angular.module('doit', ['ngStorage']);
 
+app.run(function(){
+  console.log("Started");
+  $(".task-list").show();
+});
+
 app.controller('doitController', function($scope, $localStorage){
 
   $scope.today = "D" + (new Date()).getDate() + "" + (new Date()).getMonth() + "" + (new Date()).getFullYear();
@@ -62,6 +67,8 @@ app.controller('doitController', function($scope, $localStorage){
       }, 1000);
     }, 300);
     $(".available:eq(0)").addClass("highlight");
+
+    $(".loading-bar").css("width", "100%").delay(1000).fadeOut();
   });
 
 });

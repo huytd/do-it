@@ -4,6 +4,28 @@
 
 body { position: relative; }
 
+.loading-bar {
+  width: 0; height: 2px;
+  position: fixed; z-index: 1000;
+  background: #2ecc71;
+
+  -webkit-transition:all 1000ms ease-in;
+  -moz-transition:all 1000ms ease-in;
+  -o-transition:all 1000ms ease-in;
+  transition:all 1000ms ease-in;
+}
+
+body.loaded .loading-bar {
+  width: 20%;
+}
+
+.loading-bar .head {
+  width: 100px; height: 2px;
+  background: #2ecc71;
+  box-shadow: 0 0 5px #2ecc71;
+  float: right;
+}
+
 .header {
   /*font-size: 2.2em;
   margin: 0; padding: 0; padding-left: 10px;
@@ -40,6 +62,7 @@ body { position: relative; }
   margin: 0; padding: 0;
   margin-top: 55px;
   list-style: none;
+  display: none;
 }
 
 .task-list .date {
