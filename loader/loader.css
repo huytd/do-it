@@ -12,6 +12,11 @@
 .loading-bar .head {
   width: 100px; height: 2px;
   background: #2ecc71;
-  box-shadow: 0 0 5px #2ecc71;
+  box-shadow: 0 0 8px #2ecc71;
   float: right;
+
+  -webkit-transition: opacity 0.2s, box-shadow 2s 4s;
+  transition: opacity 0.2s, box-shadow 2s 4s;
+  -webkit-transform: rotate(2deg) translateY(-2px);
+  transform: rotate(2deg) translateY(-2px);
 }

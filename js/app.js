@@ -7,6 +7,9 @@ app.run(function(){
 
 app.controller('doitController', function($scope, $localStorage, $q){
 
+  $scope.startTime = 8;
+  $scope.endTime = 23;
+
   $scope.today = "D" + (new Date()).getDate() + "" + (new Date()).getMonth() + "" + (new Date()).getFullYear();
   $scope.todayID = 0;
   $scope.tasks = [];
@@ -33,18 +36,18 @@ app.controller('doitController', function($scope, $localStorage, $q){
     }
     ];
 
-    for (var i = 0; i < 16; i++) {
+    for (var i = 0; i < ($scope.endTime - $scope.startTime); i++) {
       $scope.tasks[$scope.todayID].hours[i] = {
-        label: ((i+8<10)?("0" + (i+8)):(i+8)) + ":00",
-        timevalue: (i + 8) * 100,
+        label: ((i+$scope.startTime<10)?("0" + (i+$scope.startTime)):(i+$scope.startTime)) + ":00",
+        timevalue: (i + $scope.startTime) * 100,
         tasks: []
       };
       for (var j = 0; j < 4; j++) {
         var min = j * 15;
         $scope.tasks[$scope.todayID].hours[i].tasks[j] = {
           text: "",
-          time: ((i+8<10)?("0" + (i+8)):(i+8)) + ":" + ((min<10)?("0" + min):min),
-          timevalue: (i + 8) * 100 + min
+          time: ((i+$scope.startTime<10)?("0" + (i+$scope.startTime)):(i+$scope.startTime)) + ":" + ((min<10)?("0" + min):min),
+          timevalue: (i + $scope.startTime) * 100 + min
         };
       }
     }
