@@ -1,26 +1,32 @@
-var app = angular.module('doit', ['ngStorage']);
+var config = {
+  startTime: 8,
+  endTime: 23,
+  tasksPerHour: 4
+};
+
+var app = angular.module('do-it', ['ngStorage']);
 
 app.run(function(){
-  console.log("Started");
   $(".task-list").show();
 });
 
-app.controller('doitController', function($scope, $localStorage, $q){
+app.controller('doItController', function($scope, $localStorage, $q){
 
-  $scope.startTime = 8;
-  $scope.endTime = 23;
-
-  $scope.today = "D" + (new Date()).getDate() + "" + (new Date()).getMonth() + "" + (new Date()).getFullYear();
-  $scope.todayID = 0;
   $scope.tasks = [];
-  $scope.currentTimeValue = (new Date()).getHours() * 100 + (new Date()).getMinutes() - 15;
+
+  var now = new Date();
+
+  $scope.today = "D" + now.getDate() + "" + now.getMonth() + "" + now.getFullYear();
+  $scope.todayIndex = 0;
+
+  $scope.currentTimeValue = now.getHours() * 100 + now.getMinutes() - 15;
 
   $scope.loadSavedData = function() {
     var func = $q.defer();
     $scope.tasks = $localStorage.tasks;
     for (var i = 0; i < $scope.tasks.length; i++) {
       if ($scope.tasks[i].id == $scope.today) {
-        $scope.todayID = i; console.log("Today ID: " + $scope.todayID);
+        $scope.todayIndex = i;
       }
     }
     func.resolve();
@@ -30,24 +36,24 @@ app.controller('doitController', function($scope, $localStorage, $q){
   $scope.initNewData = function() {
     var func = $q.defer();
     $scope.tasks = [
-    {
-      id: $scope.today,
-      hours: []
-    }
+      {
+        id: $scope.today,
+        hours: []
+      }
     ];
 
-    for (var i = 0; i < ($scope.endTime - $scope.startTime); i++) {
-      $scope.tasks[$scope.todayID].hours[i] = {
-        label: ((i+$scope.startTime<10)?("0" + (i+$scope.startTime)):(i+$scope.startTime)) + ":00",
-        timevalue: (i + $scope.startTime) * 100,
+    for (var i = 0; i < (config.endTime - config.startTime); i++) {
+      $scope.tasks[$scope.todayIndex].hours[i] = {
+        label: ((i + config.startTime < 10)?("0" + (i + config.startTime)):(i + config.startTime)) + ":00",
+        timeValue: (i + config.startTime) * 100,
         tasks: []
       };
-      for (var j = 0; j < 4; j++) {
-        var min = j * 15;
-        $scope.tasks[$scope.todayID].hours[i].tasks[j] = {
+      for (var j = 0; j < config.tasksPerHour; j++) {
+        var minutes = j * (60 / config.tasksPerHour);
+        $scope.tasks[$scope.todayIndex].hours[i].tasks[j] = {
           text: "",
-          time: ((i+$scope.startTime<10)?("0" + (i+$scope.startTime)):(i+$scope.startTime)) + ":" + ((min<10)?("0" + min):min),
-          timevalue: (i + $scope.startTime) * 100 + min
+          time: ((i + config.startTime < 10)?("0" + (i + config.startTime)):(i + config.startTime)) + ":" + ((minutes < 10)?("0" + minutes):minutes),
+          timeValue: (i + config.startTime) * 100 + minutes
         };
       }
     }
@@ -57,20 +63,18 @@ app.controller('doitController', function($scope, $localStorage, $q){
 
   $scope.saveData = function() {
     $localStorage.tasks = $scope.tasks;
-    console.log($scope.tasks);
   }
 
 
   // Startup
 
   if (angular.isDefined($localStorage.tasks)) {
-    $scope.loadSavedData().then(function(){ finished() });
+    $scope.loadSavedData().then(function(){ finishedLoading() });
   } else {
-    $scope.initNewData().then(function(){ finished() });
+    $scope.initNewData().then(function(){ finishedLoading() });
   }
 
-  function finished() {
-    console.log("Run done");
+  function finishedLoading() {
     setTimeout(function(){
       $(".available:eq(0)").addClass("highlight");
       $('html, body').animate({

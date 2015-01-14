@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="refresh" content="300">
-  <title>doit</title>
+  <title>do-it</title>
   <link href="http://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,vietnamese,latin-ext" rel="stylesheet" type="text/css">
   <link href="loader/loader.css" rel="stylesheet">
   <script src="loader/loader.js">
@@ -17,26 +17,26 @@
       .load('https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js', 'js/bootstrap.min.js', function(){
         loadbar.inc(50);
         loader.load('js/angular.js', 'js/ngStorage.js', 'js/app.js', function(){
-          angular.bootstrap(document.body, ["doit"]);
+          angular.bootstrap(document.body, ["do-it"]);
           loadbar.end();
         });
       });
     }
   </script>
 </head>
-<body onload="start()" ng-controller="doitController">
+<body onload="start()" ng-controller="doItController">
   <div class="header">
     <input type="text" class="search-box" ng-model="searchText" placeholder="Search your task or time here" />
   </div>
   <div class="container-fluid">
     <ul class="task-list">
-      <li class="row date" ng-repeat="hours in tasks[todayID].hours" ng-hide="(hours.tasks | filter:searchText).length==0">
-        <div class="col-xs-2 hour-label" ng-class="{disabled: hours.timevalue < currentTimeValue}">{{hours.label}}</div>
+      <li class="row date" ng-repeat="hours in tasks[todayIndex].hours" ng-hide="(hours.tasks | filter:searchText).length==0">
+        <div class="col-xs-2 hour-label" ng-class="{disabled: hours.timeValue < currentTimeValue}">{{hours.label}}</div>
         <div class="col-xs-10 hour-tasks">
           <ul class="hour-list">
-            <li class="row hour" ng-repeat="hour in hours.tasks | filter:searchText" ng-class="{planned: hour.text.length > 0, disabled: hour.timevalue < currentTimeValue, available: hour.timevalue >= currentTimeValue}">
-              <span class="col-md-1 task-time">{{hour.time}}</span>
-              <input class="col-md-11 task-input" type="text" ng-blur="saveData()" ng-model="hour.text" placeholder="Enter your task here" />
+            <li class="row hour" ng-repeat="task in hours.tasks | filter:searchText" ng-class="{planned: task.text.length > 0, disabled: task.timeValue < currentTimeValue, available: task.timeValue >= currentTimeValue}">
+              <span class="col-md-1 task-time">{{task.time}}</span>
+              <input class="col-md-11 task-input" type="text" ng-blur="saveData()" ng-model="task.text" placeholder="Enter your task here" />
             </li>
           </ul>
         </div>
